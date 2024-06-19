@@ -87,11 +87,11 @@ Next we're going to create a namespace specifically for the GPU Operator:
 
 By default if you have only one GPU resource only one pod can use that resource. This custom config file that tells the GPU operator to treat each physical GPU as four logical GPUs.
 
-    kubectl apply -f nvidia/time-slicing-config.yaml
+    kubectl apply -f time-slicing-config.yaml
 
 And now for the piece de la resistance we will install the GPU Operator:
 
-    helm install gpu-operator -n gpu-operator nvidia/gpu-operator --values ./nvidia/values.yaml
+    helm install gpu-operator -n gpu-operator nvidia/gpu-operator --values values.yaml
 
 I highly recommend using [OpenLens](https://github.com/MuhammedKalkan/OpenLens) to see if everything's going well. The whole setup process will take a minute or two. If everything has gone well all the pods should be Running and all the jobs should be Completed. You might see some pods with high restart counts, that's fine.
 
@@ -99,7 +99,7 @@ I highly recommend using [OpenLens](https://github.com/MuhammedKalkan/OpenLens) 
 
 The simplest way to see if it works is to use `nvidia-smi` but this time in a container:
 
-    kubectl apply -f nvidia/nvidia-smi.yaml
+    kubectl apply -f nvidia-smi.yaml
 
 Let's see if it worked:
 
@@ -127,7 +127,7 @@ Let's see if it worked:
 
 It worked! You can remove the nvidia-smi job:
 
-    kubectl delete -f nvidia/nvidia-smi.yaml
+    kubectl delete -f nvidia-smi.yaml
 
 ## Letting other containers use NVidia GPUs
 
