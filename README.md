@@ -10,7 +10,12 @@ For this tutorial I assume you have the following:
  * At least one node with some sort of NVidia GPU
  * Helm installed
 
-For my test cluster I'm using Debian 13, Debian is not [officially supported](https://github.com/NVIDIA/nvidia-container-toolkit/issues/147#issuecomment-1808273017) but seems to work just fine.
+### Tested Linux Distros
+
+This guide has been tested on:
+
+ * Debian 13 (Not [officially supported](https://github.com/NVIDIA/nvidia-container-toolkit/issues/147#issuecomment-1808273017) but seems to work just fine)
+ * Ubuntu 24.04
 
 Talos Linux has support for nvidia gpus but I have not been able to get the GPU Operator to work properly.
 
