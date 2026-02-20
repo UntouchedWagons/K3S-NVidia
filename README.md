@@ -100,46 +100,27 @@ I highly recommend using [K9S](https://k9scli.io/) to see if everything's going 
 
 ## Making sure it all works
 
-The simplest way to see if it works is to use `nvidia-smi` but this time in a container:
+Let's see if it works:
 
-    kubectl apply -f nvidia-smi.yaml
+    kubectl apply -f cuda-vector-add.yaml
 
 Let's see if it worked:
 
-    kubectl logs nvidia-smi
-    Fri Jan 30 01:43:02 2026       
-    +-----------------------------------------------------------------------------------------+
-    | NVIDIA-SMI 550.163.01             Driver Version: 550.163.01     CUDA Version: 12.4     |
-    |-----------------------------------------+------------------------+----------------------+
-    | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-    | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
-    |                                         |                        |               MIG M. |
-    |=========================================+========================+======================|
-    |   0  Quadro P400                    Off |   00000000:06:10.0 Off |                  N/A |
-    | 40%   53C    P8             N/A /  N/A  |       2MiB /   2048MiB |      0%      Default |
-    |                                         |                        |                  N/A |
-    +-----------------------------------------+------------------------+----------------------+
-                                                                                            
-    +-----------------------------------------------------------------------------------------+
-    | Processes:                                                                              |
-    |  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
-    |        ID   ID                                                               Usage      |
-    |=========================================================================================|
-    |  No running processes found                                                             |
-    +-----------------------------------------------------------------------------------------+
+    kubectl logs cuda-vector-add
+    [Vector addition of 50000 elements]
+    Copy input data from the host memory to the CUDA device
+    CUDA kernel launch with 196 blocks of 256 threads
+    Copy output data from the CUDA device to the host memory
+    Test PASSED
+    Done
 
-It worked! You can remove the nvidia-smi job:
+It worked! You can remove the test:
 
-    kubectl delete -f nvidia-smi.yaml
+    kubectl delete -f cuda-vector-add.yaml
 
 ## Letting other containers use NVidia GPUs
 
-Getting other containers to use NVidia GPUs is fairly easy. Look at the contents of nvidia-smi.yaml, specifically lines 6 through 8. Lines 6 and 7 tell Kubernetes what node the pod is allowed to run on and line 8 tells Kubernetes to use the nvidia runtime instead of the default containerd. The nvidia runtime will automatically copy everything needed for your pod to use the GPU, you can check this like so:
-
-    kubectl exec -it jellyfin-65767cc56c-th4p5 -- bash
-    nvidia-smi
-
-You should see similar output to what you got earlier. Now you can go into the Jellyfin playback settings and enable NVENC hardware transcoding.
+Getting other containers to use NVidia GPUs is fairly easy. Look at the contents of jellyfin.yaml, specifically lines 23-25 and 29-31. Line 23 tells Kubernetes to use the nvidia runtime instead of the default containerd, lines 24 & 25 tell Kubernetes what nodes the deployment can run on and lines 29 to 31 set GPU limits. The nvidia runtime will automatically copy everything needed for your pod to use the GPU, you can check this like so:
 
 ## Sources:
 
