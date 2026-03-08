@@ -21,8 +21,6 @@ spec:
         app: jellyfin
     spec:
       runtimeClassName: nvidia
-      nodeSelector:
-        nvidia.com/gpu.present: "true"
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin

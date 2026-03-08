@@ -1,16 +1,18 @@
-# The options in the toolkit section are needed for Debian 13
-toolkit:
-  env:
-    - name: CONTAINERD_CONFIG
-      value: "/etc/containerd/config.toml.tmpl"
-    - name: CONTAINERD_SOCKET
-      value: "/run/k3s/containerd/containerd.sock"
-    - name: CONTAINERD_RUNTIME_CLASS
-      value: "nvidia"
-    - name: CONTAINERD_SET_AS_DEFAULT
-      value: "true"
+gfd:
+  enabled: true
 
-devicePlugin:
-  config:
-    name: time-slicing-config-all
-    default: any
+runtimeClassName: nvidia
+
+config:
+  map:
+    default: |-
+      version: v1
+      flags:
+        migStrategy: none
+      sharing:
+        timeSlicing:
+          renameByDefault: false
+          failRequestsGreaterThanOne: false
+          resources:
+            - name: nvidia.com/gpu
+              replicas: 4
