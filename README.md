@@ -99,6 +99,7 @@ No more needs to be done directly on your Kubernetes nodes.
 Node Feature Discovery adds labels to your nodes based on what hardware is available and what features your CPU(s) support. The NVidia Device Plugin needs these labels for scheduling.
 
     helm repo add node-feature-discovery https://kubernetes-sigs.github.io/node-feature-discovery/charts
+    helm repo update
     helm upgrade --install node-feature-discovery node-feature-discovery/node-feature-discovery --create-namespace --namespace node-feature-discovery
 
 ## Installing the K8s Device Plugin
