@@ -115,7 +115,7 @@ And now we will install the K8s Device Plugin:
 
     helm upgrade --install nvdp nvdp/nvidia-device-plugin --create-namespace --namespace nvidia --values values.yaml
 
-I highly recommend using [K9S](https://k9scli.io/) to see if everything's going well. The whole setup process will take a minute or two to start up. If everything has gone well all the pods should be Running and all the pods should be Running:
+I highly recommend using [K9S](https://k9scli.io/) to see if everything's going well. The whole setup process will take a minute or two to start up. If everything has gone well all the pods should be Running:
 
     kubectl get pods -n nvidia
     NAME                                                    READY   STATUS    RESTARTS   AGE
