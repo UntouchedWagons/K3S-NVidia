@@ -15,6 +15,7 @@ This guide has been tested on:
 
  * Debian 13
  * Ubuntu 24.04
+ * NixOS 25.11
 
 Instructions for Talos Linux can be found here: https://docs.siderolabs.com/talos/v1.12/configure-your-talos-cluster/hardware-and-drivers/nvidia-gpu-proprietary Do note that you need to install [Node Feature Discovery](https://artifacthub.io/packages/helm/node-feature-discovery/node-feature-discovery) for the NVidia helm chart to work properly
 
@@ -67,6 +68,49 @@ Now we'll install gpg and add the nvidia container toolkit repository:
 And now we reboot:
 
     sudo reboot
+
+### NixOS
+
+Installing the NVidia driver and container toolkit is quite easy in NixOS too. Add the following to your `configuration.nix` (Note this will install K3S as-well):
+
+    {
+      # This installs the NVidia GPU driver
+      hardware.graphics.enable = true;
+      services.xserver.videoDrivers = [ "nvidia" ];
+      hardware.nvidia.open = false;  # see https://wiki.nixos.org/wiki/NVIDIA for more info
+
+      # This installs the container toolkit
+      hardware.nvidia-container-toolkit.enable = true;
+      hardware.nvidia-container-toolkit.mount-nvidia-executables = true;
+      hardware.nvidia-container-toolkit.extraArgs = [ "--device-name-strategy=uuid" ];
+
+      # This installs K3S
+      services.k3s.enable = true;
+      services.k3s.role = "server";
+      services.k3s.containerdConfigTemplate = ''
+          {{ template "base" . }}
+      
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+          privileged_without_host_devices = false
+          runtime_engine = ""
+          runtime_root = ""
+          runtime_type = "io.containerd.runc.v2"
+      
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+          BinaryName = "${pkgs.nvidia-container-toolkit.tools}/bin/nvidia-container-runtime.cdi"
+      '';
+    }
+
+Then we'll test the configuration.nix to make sure there's no errors:
+
+    sudo nixos-rebuild test
+
+If everything went okay we'll switch to that and reboot
+
+    sudo nixos-rebuild switch
+    sudo reboot
+
+## Testing
 
 If you want to make sure everything is working, log back in and run `nvidia-smi`. This is an optional utility to see what's going on with your GPU(s):
 
@@ -167,6 +211,7 @@ Getting other containers to use NVidia GPUs is fairly easy. Look at the contents
 
   * https://docs.siderolabs.com/talos/v1.12/configure-your-talos-cluster/hardware-and-drivers/nvidia-gpu-proprietary
   * https://github.com/mirceanton/home-ops/blob/6c8f7e23d7531489eaa273500fa37fbb2ea523a2/apps/kube-system/nvidia-device-plugin/app/helm-release.yaml
+  * https://github.com/NixOS/nixpkgs/issues/288037#issuecomment-4379779451
 
 ## Other useful links:
 
