@@ -16,7 +16,7 @@ This guide has been tested on:
 
  * Debian 13
 
-Some of the instructions necessary for Talos Linux can be found [here](https://docs.siderolabs.com/talos/v1.14/configure-your-talos-cluster/hardware-and-drivers/nvidia-gpu-proprietary), when you get to the section labelled "Deploying NVIDIA GPU Operator" return here carrying on at the [#node-feature-discovery](Node Feature Discovery) section.
+Some of the instructions necessary for Talos Linux can be found [here](https://docs.siderolabs.com/talos/v1.14/configure-your-talos-cluster/hardware-and-drivers/nvidia-gpu-proprietary), when you get to the section labelled "Deploying NVIDIA GPU Operator" return here carrying on at the [https://github.com/UntouchedWagons/K3S-NVidia#node-feature-discovery](Node Feature Discovery) section.
 
 ## Configuring repositories
 
