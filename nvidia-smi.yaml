@@ -1,10 +1,12 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/core/pod_v1.json
 apiVersion: v1
 kind: Pod
 metadata:
   name: nvidia-smi
 spec:
-  # nodeSelector:
-  #   nvidia.com/gpu.present: "true"
+  resourceClaims:
+    - name: my-gpu-claim
+      resourceClaimTemplateName: test-nvidia-gpu
   runtimeClassName: nvidia
   restartPolicy: Never
   containers:
@@ -12,5 +14,5 @@ spec:
       image: nvcr.io/nvidia/cuda:12.5.0-base-ubuntu22.04
       command: ["nvidia-smi"]
       resources:
-        limits:
-          nvidia.com/gpu: "1"
+        claims:
+          - name: my-gpu-claim

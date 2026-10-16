@@ -1,18 +1,10 @@
-gfd:
-  enabled: true
+# Talos installs drivers via system extensions under /usr/local
+# nvidiaDriverRoot: /usr/local
+gpuResourcesEnabledOverride: true
+resources:
+  gpus:
+    enabled: true
 
-runtimeClassName: nvidia
-
-config:
-  map:
-    default: |-
-      version: v1
-      flags:
-        migStrategy: none
-      sharing:
-        timeSlicing:
-          renameByDefault: false
-          failRequestsGreaterThanOne: false
-          resources:
-            - name: nvidia.com/gpu
-              replicas: 4
+featureGates:
+  ConsumableShares: true
+consumableShares: unlimited

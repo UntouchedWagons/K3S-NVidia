@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/apps/deployment_v1.json
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -20,14 +21,18 @@ spec:
       labels:
         app: jellyfin
     spec:
+      resourceClaims:
+        - name: my-gpu-claim
+          resourceClaimTemplateName: test-nvidia-gpu
       runtimeClassName: nvidia
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin
           resources:
-            limits:
-              nvidia.com/gpu: "1"
+            claims:
+              - name: my-gpu-claim
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/core/service_v1.json
 apiVersion: v1
 kind: Service
 metadata:
